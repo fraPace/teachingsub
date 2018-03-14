@@ -96,7 +96,7 @@ class AssignmentController extends Controller
     {
         $logged_user = Auth::user();
         if($logged_user->hasRole('admin'))
-            $assignment->submissions = $logged_user->submissions()->withTrashed()->get();
+            $assignment->submissions = $assignment->submissions()->withTrashed()->get();
 
         // Load only the submissions for the logged user is it is a student, otherwise get all
         if($logged_user->hasRole('student')){
