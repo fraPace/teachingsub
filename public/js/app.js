@@ -13824,7 +13824,7 @@ window.$(document).ready(function () {
         select: {
             style: 'os'
         },
-        dom: 'Bfrtip',
+        dom: 'lBfrtip',
         buttons: ['selectAll', 'selectNone']
     });
 
@@ -13843,9 +13843,21 @@ window.$(document).ready(function () {
         }
     });
 
-    $('div.dataTables_filter, div.dataTables_paginate').addClass('pull-right');
-    $('div.dataTables_filter, div.dataTables_length').addClass('form-inline');
+    $('div.dataTables_filter, div.dataTables_paginate').addClass('float-right');
+    // $('div.dataTables_filter, div.dataTables_length').addClass('form-inline');
     $('div.dataTables_wrapper').addClass('p-0');
+
+    $("form").on('submit', function (e) {
+        var $form = $(this);
+        // Iterate over all checkboxes in the table
+        selected_table.$('input[type="checkbox"]').each(function () {
+            // If checkbox doesn't exist in DOM
+            if (!$.contains(document, this)) {
+                // Create a hidden element
+                $form.append($('<input>').attr('type', 'hidden').attr('name', this.name).val(this.value));
+            }
+        });
+    });
 });
 
 // window.$(document).ready(function(){
