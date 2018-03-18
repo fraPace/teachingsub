@@ -34,29 +34,41 @@ window.$(document).ready(function() {
         },
         dom: 'lBfrtip',
         buttons: [
-            'selectAll',
-            'selectNone'
+            {
+                extend: 'selectAll',
+                action : function(e, dt, node, config) {
+                    e.preventDefault();
+                    dt.rows({ search: 'applied'}).select();
+                    $('.buttons-select-none').removeClass('disabled');
+                }
+            },
+            {
+                extend: 'selectNone',
+                action : function(e, dt, node, config) {
+                    e.preventDefault();
+                    dt.rows({ search: 'applied'}).deselect();
+                }
+            }
         ]
     } );
+
+    $('div.dataTables_filter, div.dataTables_paginate').addClass('float-right');
+    // $('div.dataTables_filter, div.dataTables_length').addClass('form-inline');
+    $('div.dataTables_wrapper').addClass('p-0');
+    $('.buttons-select-none').removeClass('disabled');
 
     // selected_table.rows($('.datatable-select-checkbox input:checked').parent()).select();
 
     selected_table.on( 'select', function ( e, dt, type, indexes ) {
         if ( type === 'row' ) {
             $(selected_table.rows( indexes ).nodes()).find('input:checkbox').attr('checked', true);
-            // do something with the ID of the selected items
         }
     } );
     selected_table.on( 'deselect', function ( e, dt, type, indexes ) {
         if ( type === 'row' ) {
             $(selected_table.rows( indexes ).nodes()).find('input:checkbox').attr('checked', false);
-            // do something with the ID of the selected items
         }
     } );
-
-    $('div.dataTables_filter, div.dataTables_paginate').addClass('float-right');
-    // $('div.dataTables_filter, div.dataTables_length').addClass('form-inline');
-    $('div.dataTables_wrapper').addClass('p-0');
 
 
     $("form").on('submit', function(e) {
