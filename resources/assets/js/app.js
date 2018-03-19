@@ -74,16 +74,18 @@ window.$(document).ready(function() {
     $("form").on('submit', function(e) {
         var $form = $(this);
         // Iterate over all checkboxes in the table
-        selected_table.$('input[type="checkbox"]').each(function () {
+        selected_table.table($('.datatable-select-checkbox', this)).$('input[type="checkbox"]').each(function () {
             // If checkbox doesn't exist in DOM
             if (!$.contains(document, this)) {
-                // Create a hidden element
-                $form.append(
-                    $('<input>')
-                        .attr('type', 'hidden')
-                        .attr('name', this.name)
-                        .val(this.value)
-                );
+                if($(this).is(':checked')){
+                    // Create a hidden element
+                    $form.append(
+                        $('<input>')
+                            .attr('type', 'hidden')
+                            .attr('name', this.name)
+                            .val(this.value)
+                    );
+                }
             }
         });
     });

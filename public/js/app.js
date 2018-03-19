@@ -13825,15 +13825,10 @@ window.$(document).ready(function () {
             style: 'os'
         },
         dom: 'lBfrtip',
-        buttons: [
-        // "selectAll", "selectNone",
-        {
+        buttons: [{
             extend: 'selectAll',
             action: function action(e, dt, node, config) {
                 e.preventDefault();
-                // dt.rows({ search: 'applied'}).nodes().each(function() {
-                //     $(this).addClass('selected');
-                // });
                 dt.rows({ search: 'applied' }).select();
                 $('.buttons-select-none').removeClass('disabled');
             }
@@ -13841,9 +13836,6 @@ window.$(document).ready(function () {
             extend: 'selectNone',
             action: function action(e, dt, node, config) {
                 e.preventDefault();
-                // dt.rows({ search: 'applied'}).nodes().each(function() {
-                //     $(this).removeClass('selected')
-                // });
                 dt.rows({ search: 'applied' }).deselect();
             }
         }]
@@ -13870,11 +13862,16 @@ window.$(document).ready(function () {
     $("form").on('submit', function (e) {
         var $form = $(this);
         // Iterate over all checkboxes in the table
-        selected_table.$('input[type="checkbox"]').each(function () {
+        var table = selected_table.table($('.datatable-select-checkbox', this));
+        console.log(table);
+        table.$('input[type="checkbox"]').each(function () {
+            console.log(this);
             // If checkbox doesn't exist in DOM
             if (!$.contains(document, this)) {
-                // Create a hidden element
-                $form.append($('<input>').attr('type', 'hidden').attr('name', this.name).val(this.value));
+                if ($(this).is(':checked')) {
+                    // Create a hidden element
+                    $form.append($('<input>').attr('type', 'hidden').attr('name', this.name).val(this.value));
+                }
             }
         });
     });
