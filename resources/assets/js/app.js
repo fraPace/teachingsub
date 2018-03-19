@@ -74,7 +74,8 @@ window.$(document).ready(function() {
     $("form").on('submit', function(e) {
         var $form = $(this);
         // Iterate over all checkboxes in the table
-        selected_table.table($('.datatable-select-checkbox', this)).$('input[type="checkbox"]').each(function () {
+        var $table = selected_table.table($('.datatable-select-checkbox', this));
+        $table.$('input[type="checkbox"]').each(function () {
             // If checkbox doesn't exist in DOM
             if (!$.contains(document, this)) {
                 if($(this).is(':checked')){
