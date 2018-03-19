@@ -2,9 +2,11 @@
 
 namespace App;
 
+use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Validation\Rule;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -42,9 +44,9 @@ class User extends Authenticatable
         ];
     }
 
-    public static function updateRules(){
+    public static function updateRules(User $user){
         return [
-            'username' => 'required|string|max:255',
+            'username' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($user->id)],
             'name' => 'required|string|max:255',
             'email' => 'present|nullable|string|email|max:255',
         ];

@@ -128,6 +128,9 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        if($user->hasRole('admin'))
+            return redirect()->back()->with('status-warning', __("You cannot delete an Admin user!"));
+
         try {
             $user->delete();
         } catch (\Exception $e) {

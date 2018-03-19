@@ -59,7 +59,7 @@
                     }
                 @endphp
                 @foreach($roles as $role)
-                    <option value="{{$role->name}}" {{ old('role', $old_role) == $role->id ? 'selected' : ''}}>{{$role->name}}</option>
+                    <option value="{{$role->id}}" {{ old('role', $old_role) == $role->id ? 'selected' : ''}}>{{$role->name}}</option>
                 @endforeach
             </select>
 
