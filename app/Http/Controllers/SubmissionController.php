@@ -137,6 +137,8 @@ class SubmissionController extends Controller
             $submission->update([
                 'path' => $file->storeAs($assignment_id, $name.'.'.$file->getClientOriginalExtension())
             ]);
+            // Force the update of updated_at column
+            $submission->touch();
             return redirect()->route('assignments.show', ["id" => $assignment_id]);
         }else{
             return redirect()->back()->withErrors(["file" => "Upload Failed."])->withInput();
