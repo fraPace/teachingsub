@@ -131,7 +131,8 @@ class SubmissionController extends Controller
             Storage::delete($submission->path);
 
             $file = $request->file('file');
-            $name = $request->input('name');
+//            $name = $request->input('name');
+            $name = $submission->name;
             $assignment_id = $request->input('assignment_id');
 
             $submission->update([
@@ -169,8 +170,10 @@ class SubmissionController extends Controller
     public function forceDestroy(Submission $submission)
     {
         try {
-            if($submission->trashed())
+            if($submission->trashed()){
+                Storage::delete($submission->path);
                 $submission->forceDelete();
+            }
             else
                 $submission->delete();
         } catch (\Exception $e) {
