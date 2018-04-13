@@ -36,7 +36,11 @@ class Controller extends BaseController
         return Storage::disk(config('FILESYSTEM_DRIVER'))->getDriver()->getAdapter()->applyPathPrefix($path);
     }
 
-    public function setTime($date){
+    public function setEndOfTheDay($date){
         return Carbon::parse($date)->setTime(23,59,59);
+    }
+
+    public function setStartOfTheDay($date){
+        return Carbon::parse($date)->setTime(0,0,0);
     }
 }

@@ -73,8 +73,8 @@ class AssignmentController extends Controller
      */
     public function store(AssignmentRequest $request)
     {
-        $starts_at = $this->setTime($request->input('starts_at'));
-        $ends_at = $this->setTime($request->input('ends_at'));
+        $starts_at = $this->setStartOfTheDay($request->input('starts_at'));
+        $ends_at = $this->setEndOfTheDay($request->input('ends_at'));
         $assignment = Assignment::create([
             'name' => $request->input('name'),
             'starts_at' => $starts_at->toDateTimeString(),
@@ -138,8 +138,8 @@ class AssignmentController extends Controller
      */
     public function update(AssignmentRequest $request, Assignment $assignment)
     {
-        $starts_at = $this->setTime($request->input('starts_at'));
-        $ends_at = $this->setTime($request->input('ends_at'));
+        $starts_at = $this->setStartOfTheDay($request->input('starts_at'));
+        $ends_at = $this->setEndOfTheDay($request->input('ends_at'));
 
         $input = $request->all();
         $input['starts_at'] = $starts_at->toDateTimeString();
