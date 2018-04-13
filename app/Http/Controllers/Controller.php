@@ -10,6 +10,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class Controller extends BaseController
 {
@@ -33,5 +34,9 @@ class Controller extends BaseController
 
     public function getStorageRealPath($path){
         return Storage::disk(config('FILESYSTEM_DRIVER'))->getDriver()->getAdapter()->applyPathPrefix($path);
+    }
+
+    public function setTime($date){
+        return Carbon::parse($date)->setTime(23,59,59);
     }
 }

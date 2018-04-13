@@ -73,10 +73,12 @@ class AssignmentController extends Controller
      */
     public function store(AssignmentRequest $request)
     {
+        $starts_at = $this->setTime($request->input('starts_at'));
+        $ends_at = $this->setTime($request->input('ends_at'));
         $assignment = Assignment::create([
             'name' => $request->input('name'),
-            'starts_at' => Carbon::parse($request->input('starts_at'))->toDateTimeString(),
-            'ends_at' => Carbon::parse($request->input('ends_at'))->toDateTimeString(),
+            'starts_at' => $starts_at->toDateTimeString(),
+            'ends_at' => $ends_at->toDateTimeString(),
             'course_id' => $request->input('course_id'),
             'url' => $request->input('url'),
             'tag' => $request->input('tag')
@@ -136,7 +138,14 @@ class AssignmentController extends Controller
      */
     public function update(AssignmentRequest $request, Assignment $assignment)
     {
-        $assignment->update($request->all());
+        $starts_at = $this->setTime($request->input('starts_at'));
+        $ends_at = $this->setTime($request->input('ends_at'));
+
+        $input = $request->all();
+        $input['starts_at'] = $starts_at->toDateTimeString();
+        $input['ends_at'] = $ends_at->toDateTimeString();
+
+        $assignment->update($input);
         return redirect()->route('courses.show', ["id" => $assignment->course->id]);
     }
 
