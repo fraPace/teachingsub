@@ -78,10 +78,13 @@ class CourseController extends Controller
      */
     public function store(CourseRequest $request)
     {
+        $starts_at = $this->setStartOfTheDay($request->input('starts_at'));
+        $ends_at = $this->setEndOfTheDay($request->input('ends_at'));
+
         $course = Course::create([
             'name' => $request->input('name'),
-            'starts_at' => Carbon::parse($request->input('starts_at'))->toDateTimeString(),
-            'ends_at' => Carbon::parse($request->input('ends_at'))->toDateTimeString(),
+            'starts_at' => $starts_at->toDateTimeString(),
+            'ends_at' => $ends_at->toDateTimeString(),
             'url' => $request->input('url'),
             'tag' => $request->input('tag')
         ]);
@@ -159,7 +162,14 @@ class CourseController extends Controller
      */
     public function update(CourseRequest $request, Course $course)
     {
-        $course->update($request->all());
+        $starts_at = $this->setStartOfTheDay($request->input('starts_at'));
+        $ends_at = $this->setEndOfTheDay($request->input('ends_at'));
+
+        $input = $request->all();
+        $input['starts_at'] = $starts_at->toDateTimeString();
+        $input['ends_at'] = $ends_at->toDateTimeString();
+
+        $course->update($input);
         $course->users()->sync($request->input('user_id'));
 
         return redirect()->route('courses.index');
