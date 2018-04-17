@@ -97,24 +97,29 @@ class AssignmentController extends Controller
     public function show(Assignment $assignment)
     {
         $logged_user = Auth::user();
-        if($logged_user->hasRole('admin'))
+        if($logged_user->hasRole('admin')){
             $assignment->submissions = $assignment->submissions()->withTrashed()->get();
+        }
 
         // Load only the submissions for the logged user is it is a student, otherwise get all
         if($logged_user->hasRole('student')){
             $assignment->submissions = $logged_user->submissions()->where('assignment_id', $assignment->id)->get();
             // Here we check if the user has already a submission for this assignment
             $allow_new_submission = 0 === count($assignment->submissions);
+
+            $users = array();
         }else{
             // Here we check if the user has already a submission for this assignment
             $allow_new_submission = 0 === $logged_user->submissions()->where('assignment_id', $assignment->id)->count();
+
+            $users = $assignment->course->users;
         }
 
         $submission = new Submission();
         $submission->assignment = $assignment;
 
         return view('assignments.show')->with(compact(
-            'assignment', 'allow_new_submission', 'logged_user', 'submission'));
+            'assignment', 'allow_new_submission', 'logged_user', 'submission', 'users'));
     }
 
     /**
