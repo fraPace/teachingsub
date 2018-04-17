@@ -110,7 +110,8 @@ class AssignmentController extends Controller
             $users = array();
         }else{
             // Here we check if the user has already a submission for this assignment
-            $allow_new_submission = 0 === $logged_user->submissions()->where('assignment_id', $assignment->id)->count();
+//            $allow_new_submission = 0 === $logged_user->submissions()->where('assignment_id', $assignment->id)->count();
+            $allow_new_submission = true;
 
             $users = $assignment->course->users;
         }
