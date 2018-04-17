@@ -13,25 +13,23 @@
             <td>{{$r->updated_at ?: $r->created_at}}</td>
             <td class="flex-center pull-left">
                 <a class="btn btn-sm btn-info mr-1" href="{{ route($resource_base_route.'.download', ['id' => $r->id]) }}">{{ __('Download') }}</a>
-                @role('admin|student')
-                    @if(!$r->trashed())
-                        @php
-                            $modal_id = 'editModal'.$resource_name.$r->id;
-                        @endphp
-                        <button type="button" class="btn btn-sm btn-primary float-right" data-toggle="modal" data-target="#{{ $modal_id }}">
-                            {{ __('Edit') }}
-                        </button>
-                        @include("layouts.forms.modals.edit", [
-                            "resource" => $r,
-                            "resource_name" => $resource_name,
-                            "id" => $modal_id
-                        ])
-                    @endif
-                    @include('admin.parts.actions', [
+                @if(!$r->trashed())
+                    @php
+                        $modal_id = 'editModal'.$resource_name.$r->id;
+                    @endphp
+                    <button type="button" class="btn btn-sm btn-primary float-right" data-toggle="modal" data-target="#{{ $modal_id }}">
+                        {{ __('Edit') }}
+                    </button>
+                    @include("layouts.forms.modals.edit", [
                         "resource" => $r,
-                        "resource_base_route" => $resource_base_route
+                        "resource_name" => $resource_name,
+                        "id" => $modal_id
                     ])
-                @endrole
+                @endif
+                @include('admin.parts.actions', [
+                    "resource" => $r,
+                    "resource_base_route" => $resource_base_route
+                ])
             </td>
         </tr>
     @endforeach
