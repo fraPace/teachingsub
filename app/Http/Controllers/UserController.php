@@ -174,30 +174,37 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function updatePassword(PasswordRequest $request)
+    public function updatePassword(User $user, PasswordRequest $request)
     {
+        $logged_user = Auth::user();
 
-        if (!(Hash::check($request->get('current-password'), Auth::user()->password))) {
-            // The passwords does not matches
-            $message = __("Your current password does not matches with the password you provided. Please try again.");
-            return redirect()->back()->withInput()->withErrors(['current-password' => $message]);
+        if($logged_user->hasRole('admin') || $logged_user->id == $user->id){
+            if (!(Hash::check($request->get('current-password'), Auth::user()->password))) {
+                // The passwords does not matches
+                $message = __("Your current password does not matches with the password you provided. Please try again.");
+                return redirect()->back()->withInput()->withErrors(['current-password' => $message]);
+            }
+
+            //Change Password
+            $user->password = Hash::make($request->get('password'));
+            $user->save();
+
+            return redirect()->back()->with("status-success", __("Password changed successfully!"));
         }
 
-        //Change Password
-        $user = Auth::user();
-        $user->password = Hash::make($request->get('password'));
-        $user->save();
-
-        return redirect()->back()->with("status-success", __("Password changed successfully!"));
+        return redirect()->back()->with('status-warning', __("You cannot perform this action!"));
     }
 
-    public function resetPassword(ResetPasswordRequest $request)
+    public function resetPassword(User $user, ResetPasswordRequest $request)
     {
-        //Change Password
-        $user = Auth::user();
-        $user->password = Hash::make($request->get('password'));
-        $user->save();
+        if(Auth::user()->hasRole('admin')){
+            //Change Password
+            $user->password = Hash::make($request->get('password'));
+            $user->save();
 
-        return redirect()->back()->with("status-success", __("Password changed successfully !"));
+            return redirect()->back()->with("status-success", __("Password changed successfully !"));
+        }
+
+        return redirect()->back()->with('status-warning', __("You cannot perform this action!"));
     }
 }
